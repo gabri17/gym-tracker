@@ -1,4 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+// ─── localStorage helpers (Safari-safe) ──────────────────────────────────────
+function loadLS<T>(key: string, fallback: T): T {
+  try {
+    const raw = localStorage.getItem(key);
+    if (raw === null) return fallback;
+    return JSON.parse(raw) as T;
+  } catch {
+    return fallback;
+  }
+}
+
+function saveLS(key: string, value: unknown): void {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    // Safari private mode or storage quota exceeded — silently ignore
+  }
+}
 
 // ─── Fonts ───────────────────────────────────────────────────────────────────
 const FONTS = `
@@ -343,11 +362,31 @@ Lat Machine | 4x8-10 | 65`;
 
 // ─── Main App ─────────────────────────────────────────────────────────────────
 export default function GymTracker() {
-  const [program, setProgram] = useState(PLACEHOLDER_PROGRAM);
-  const [week, setWeek] = useState(1);
-  const [activeDay, setActiveDay] = useState(Object.keys(PLACEHOLDER_PROGRAM)[0]);
-  const [editMode, setEditMode] = useState(false);
+  // ── Initialise from localStorage (lazy initialisers run only once on mount) ─
+  const [program, setProgram] = useState(() =>
+    loadLS("gym_program", PLACEHOLDER_PROGRAM)
+  );
+
+  const [week, setWeek] = useState(() =>
+    loadLS("gym_week", 1)
+  );
+
+  const [activeDay, setActiveDay] = useState(() => {
+    const savedProgram = loadLS("gym_program", PLACEHOLDER_PROGRAM);
+    const savedDay    = loadLS("gym_activeDay", Object.keys(savedProgram)[0]);
+    // Guard: saved day might not exist if program was reset
+    return Object.keys(savedProgram).includes(savedDay)
+      ? savedDay
+      : Object.keys(savedProgram)[0];
+  });
+
+  const [editMode, setEditMode]   = useState(false);
   const [showImport, setShowImport] = useState(false);
+
+  // ── Persist to localStorage whenever state changes ────────────────────────
+  useEffect(() => { saveLS("gym_program",   program);   }, [program]);
+  useEffect(() => { saveLS("gym_week",      week);      }, [week]);
+  useEffect(() => { saveLS("gym_activeDay", activeDay); }, [activeDay]);
 
   const days = Object.keys(program);
   const exercises = program[activeDay]?.exercises ?? [];
