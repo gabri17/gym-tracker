@@ -39,7 +39,6 @@ const FONTS = `
 
   /* ----- MOBILE OPTIMIZATIONS ----- */
   @media (max-width: 640px) {
-    /* Larger touch targets */
     .week-selector button {
       width: 44px !important;
       height: 44px !important;
@@ -57,7 +56,6 @@ const FONTS = `
       font-size: 13px !important;
     }
     
-    /* Improve spacing and readability */
     .main-container {
       padding: 24px 12px 48px !important;
     }
@@ -71,7 +69,6 @@ const FONTS = `
       font-size: 11px !important;
     }
     
-    /* Make tables scrollable horizontally */
     .exercise-table-wrapper {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
@@ -84,14 +81,12 @@ const FONTS = `
       min-width: 520px;
     }
     
-    /* Better edit inputs on mobile */
     .edit-input {
       width: 70px !important;
       padding: 8px 4px !important;
       font-size: 14px !important;
     }
     
-    /* Modal adjustments */
     .import-modal {
       padding: 20px !important;
       max-width: 94% !important;
@@ -103,7 +98,6 @@ const FONTS = `
       font-size: 14px !important;
     }
     
-    /* Progression table improvements */
     .progression-wrapper {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
@@ -125,7 +119,6 @@ const FONTS = `
       min-width: 110px;
     }
     
-    /* Header adjustments */
     .main-header h1 {
       font-size: clamp(28px, 7vw, 40px) !important;
     }
@@ -134,7 +127,6 @@ const FONTS = `
       gap: 8px !important;
     }
     
-    /* Improve footer readability */
     .footer-text {
       font-size: 10px !important;
       padding: 0 16px !important;
@@ -176,7 +168,6 @@ function parseTextImport(raw: string) {
   let currentDay: string | null = null;
   let exCounter = 0;
 
-  const DAY_RE = /^(lun|mar|mer|gio|ven|sab|dom|monday|tuesday|wednesday|thursday|friday|saturday|sunday|\w+)\b/i;
   const EX_RE = /^(.+?)\s*[|,;\t]\s*(\d+)\s*[xX×]\s*([\w–\-\/]+)\s*(?:[|,;\t]\s*(\d+(?:[.,]\d+)?))?/i;
 
   for (const line of lines) {
@@ -255,7 +246,7 @@ const PLACEHOLDER_PROGRAM = {
   },
 };
 
-const WEEKS = [1,2,3,4,5,6,7,8];
+const WEEKS = [1, 2, 3, 4, 5, 6, 7, 8];
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -267,13 +258,16 @@ function WeekSelector({ week, setWeek }: { week: number; setWeek: (w: number) =>
           key={w}
           onClick={() => setWeek(w)}
           style={{
-            width: 36, height: 36, borderRadius: "50%",
+            width: 36,
+            height: 36,
+            borderRadius: "50%",
             border: w === week ? "2px solid #1a1a1a" : "1.5px solid #d0ccc5",
             background: w === week ? "#1a1a1a" : "transparent",
             color: w === week ? "#f5f2ee" : "#999",
             fontFamily: "'Lato', sans-serif",
             fontWeight: w === week ? 700 : 400,
-            fontSize: 12, cursor: "pointer",
+            fontSize: 12,
+            cursor: "pointer",
             transition: "all 0.15s",
           }}
         >
@@ -284,32 +278,44 @@ function WeekSelector({ week, setWeek }: { week: number; setWeek: (w: number) =>
   );
 }
 
-function ExerciseTable({ day, exercises, week, onUpdate, editMode }: { 
-  day: string; 
-  exercises: any[]; 
-  week: number; 
-  onUpdate: (id: string, field: string, value: number) => void; 
+function ExerciseTable({
+  exercises,
+  week,
+  onUpdate,
+  editMode,
+}: {
+  exercises: any[];
+  week: number;
+  onUpdate: (id: string, field: string, value: number) => void;
   editMode: boolean;
 }) {
   return (
     <div className="exercise-table-wrapper" style={{ width: "100%" }}>
       {/* Table header */}
-      <div className="exercise-grid-header" style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 72px 90px 80px 70px",
-        padding: "6px 12px",
-        borderBottom: "2px solid #1a1a1a",
-        marginBottom: 2,
-      }}>
-        {["Esercizio", "Serie×Rip.", "Base kg", "W"+week+" kg", "Δ/sett."].map((h, i) => (
-          <span key={h} style={{
-            fontFamily: "'Lato', sans-serif",
-            fontSize: 10,
-            letterSpacing: 1,
-            textTransform: "uppercase",
-            color: "#aaa",
-            textAlign: i > 0 ? "center" : "left",
-          }}>{h}</span>
+      <div
+        className="exercise-grid-header"
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 72px 90px 80px 70px",
+          padding: "6px 12px",
+          borderBottom: "2px solid #1a1a1a",
+          marginBottom: 2,
+        }}
+      >
+        {["Esercizio", "Serie×Rip.", "Base kg", `W${week} kg`, "Δ/sett."].map((h, i) => (
+          <span
+            key={h}
+            style={{
+              fontFamily: "'Lato', sans-serif",
+              fontSize: 10,
+              letterSpacing: 1,
+              textTransform: "uppercase",
+              color: "#aaa",
+              textAlign: i > 0 ? "center" : "left",
+            }}
+          >
+            {h}
+          </span>
         ))}
       </div>
 
@@ -352,12 +358,14 @@ function ExerciseTable({ day, exercises, week, onUpdate, editMode }: {
                   onChange={e => onUpdate(ex.id, "baseKg", parseFloat(e.target.value) || 0)}
                   className="edit-input"
                   style={{
-                    width: 60, textAlign: "center",
+                    width: 60,
+                    textAlign: "center",
                     border: "1.5px solid #c8b89a",
                     borderRadius: 6,
                     background: "#fffdf9",
                     fontFamily: "'Lato', sans-serif",
-                    fontSize: 13, color: "#1a1a1a",
+                    fontSize: 13,
+                    color: "#1a1a1a",
                     padding: "3px 6px",
                     outline: "none",
                   }}
@@ -370,22 +378,27 @@ function ExerciseTable({ day, exercises, week, onUpdate, editMode }: {
             )}
 
             {/* Current week kg */}
-            <span style={{
-              textAlign: "center",
-              fontFamily: "'Lato', sans-serif",
-              fontSize: 15, fontWeight: 700,
-              color: isBodyweight ? "#bbb" : "#1a1a1a",
-            }}>
+            <span
+              style={{
+                textAlign: "center",
+                fontFamily: "'Lato', sans-serif",
+                fontSize: 15,
+                fontWeight: 700,
+                color: isBodyweight ? "#bbb" : "#1a1a1a",
+              }}
+            >
               {isBodyweight ? "BW" : `${kg}`}
             </span>
 
             {/* Delta */}
-            <span style={{
-              textAlign: "center",
-              fontFamily: "'Lato', sans-serif",
-              fontSize: 12,
-              color: isBodyweight ? "#ddd" : "#8aab6e",
-            }}>
+            <span
+              style={{
+                textAlign: "center",
+                fontFamily: "'Lato', sans-serif",
+                fontSize: 12,
+                color: isBodyweight ? "#ddd" : "#8aab6e",
+              }}
+            >
               {isBodyweight ? "—" : `+${delta}`}
             </span>
           </div>
@@ -418,45 +431,75 @@ Lat Machine | 4x8-10 | 65`;
   }
 
   return (
-    <div style={{
-      position: "fixed", inset: 0,
-      background: "rgba(30,25,20,0.5)",
-      display: "flex", alignItems: "center", justifyContent: "center",
-      zIndex: 100, padding: 20,
-    }}>
-      <div className="import-modal fade-in" style={{
-        background: "#fff",
-        borderRadius: 16,
-        padding: 32,
-        maxWidth: 560, width: "100%",
-        boxShadow: "0 24px 60px rgba(0,0,0,0.18)",
-      }}>
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(30,25,20,0.5)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 100,
+        padding: 20,
+      }}
+    >
+      <div
+        className="import-modal fade-in"
+        style={{
+          background: "#fff",
+          borderRadius: 16,
+          padding: 32,
+          maxWidth: 560,
+          width: "100%",
+          boxShadow: "0 24px 60px rgba(0,0,0,0.18)",
+        }}
+      >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
           <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, color: "#1a1a1a" }}>
             Importa la tua scheda
           </h2>
-          <button onClick={onClose} className="btn-ghost" style={{
-            border: "none", background: "transparent", fontSize: 20,
-            cursor: "pointer", color: "#aaa", borderRadius: 8, padding: "2px 8px",
-          }}>×</button>
+          <button
+            onClick={onClose}
+            className="btn-ghost"
+            style={{
+              border: "none",
+              background: "transparent",
+              fontSize: 20,
+              cursor: "pointer",
+              color: "#aaa",
+              borderRadius: 8,
+              padding: "2px 8px",
+            }}
+          >
+            ×
+          </button>
         </div>
 
         <p style={{ fontFamily: "'Lato', sans-serif", fontSize: 13, color: "#777", marginBottom: 14, lineHeight: 1.6 }}>
-          Incolla la tua scheda nel formato libero qui sotto. Ogni giorno inizia con il nome del giorno,
-          poi un esercizio per riga nel formato <strong>Nome | Serie×Rip | Kg base</strong>.
+          Incolla la tua scheda nel formato libero qui sotto. Ogni giorno inizia con il nome del giorno, poi un
+          esercizio per riga nel formato <strong>Nome | Serie×Rip | Kg base</strong>.
         </p>
 
         <textarea
           value={raw}
-          onChange={e => { setRaw(e.target.value); setError(""); }}
+          onChange={e => {
+            setRaw(e.target.value);
+            setError("");
+          }}
           placeholder={EXAMPLE}
           rows={10}
           style={{
-            width: "100%", resize: "vertical",
-            border: "1.5px solid #ddd", borderRadius: 10,
-            padding: 14, fontFamily: "'Lato', sans-serif",
-            fontSize: 13, color: "#1a1a1a", lineHeight: 1.7,
-            background: "#fdfcfa", outline: "none",
+            width: "100%",
+            resize: "vertical",
+            border: "1.5px solid #ddd",
+            borderRadius: 10,
+            padding: 14,
+            fontFamily: "'Lato', sans-serif",
+            fontSize: 13,
+            color: "#1a1a1a",
+            lineHeight: 1.7,
+            background: "#fdfcfa",
+            outline: "none",
           }}
         />
 
@@ -467,19 +510,36 @@ Lat Machine | 4x8-10 | 65`;
         )}
 
         <div style={{ display: "flex", gap: 10, marginTop: 18, justifyContent: "flex-end" }}>
-          <button onClick={onClose} className="btn-ghost" style={{
-            padding: "9px 20px", borderRadius: 8,
-            border: "1.5px solid #ddd", background: "transparent",
-            fontFamily: "'Lato', sans-serif", fontSize: 13, cursor: "pointer", color: "#777",
-          }}>
+          <button
+            onClick={onClose}
+            className="btn-ghost"
+            style={{
+              padding: "9px 20px",
+              borderRadius: 8,
+              border: "1.5px solid #ddd",
+              background: "transparent",
+              fontFamily: "'Lato', sans-serif",
+              fontSize: 13,
+              cursor: "pointer",
+              color: "#777",
+            }}
+          >
             Annulla
           </button>
-          <button onClick={handleImport} style={{
-            padding: "9px 24px", borderRadius: 8,
-            border: "none", background: "#1a1a1a",
-            fontFamily: "'Lato', sans-serif", fontSize: 13,
-            fontWeight: 700, cursor: "pointer", color: "#f5f2ee",
-          }}>
+          <button
+            onClick={handleImport}
+            style={{
+              padding: "9px 24px",
+              borderRadius: 8,
+              border: "none",
+              background: "#1a1a1a",
+              fontFamily: "'Lato', sans-serif",
+              fontSize: 13,
+              fontWeight: 700,
+              cursor: "pointer",
+              color: "#f5f2ee",
+            }}
+          >
             Importa →
           </button>
         </div>
@@ -491,29 +551,26 @@ Lat Machine | 4x8-10 | 65`;
 // ─── Main App ─────────────────────────────────────────────────────────────────
 export default function GymTracker() {
   // ── Initialise from localStorage ─────────────────────────────────────────
-  const [program, setProgram] = useState(() =>
-    loadLS("gym_program", PLACEHOLDER_PROGRAM)
-  );
-
-  const [week, setWeek] = useState(() =>
-    loadLS("gym_week", 1)
-  );
-
+  const [program, setProgram] = useState(() => loadLS("gym_program", PLACEHOLDER_PROGRAM));
+  const [week, setWeek] = useState(() => loadLS("gym_week", 1));
   const [activeDay, setActiveDay] = useState(() => {
     const savedProgram = loadLS("gym_program", PLACEHOLDER_PROGRAM);
-    const savedDay    = loadLS("gym_activeDay", Object.keys(savedProgram)[0]);
-    return Object.keys(savedProgram).includes(savedDay)
-      ? savedDay
-      : Object.keys(savedProgram)[0];
+    const savedDay = loadLS("gym_activeDay", Object.keys(savedProgram)[0]);
+    return Object.keys(savedProgram).includes(savedDay) ? savedDay : Object.keys(savedProgram)[0];
   });
-
-  const [editMode, setEditMode]   = useState(false);
+  const [editMode, setEditMode] = useState(false);
   const [showImport, setShowImport] = useState(false);
 
   // ── Persist to localStorage whenever state changes ────────────────────────
-  useEffect(() => { saveLS("gym_program",   program);   }, [program]);
-  useEffect(() => { saveLS("gym_week",      week);      }, [week]);
-  useEffect(() => { saveLS("gym_activeDay", activeDay); }, [activeDay]);
+  useEffect(() => {
+    saveLS("gym_program", program);
+  }, [program]);
+  useEffect(() => {
+    saveLS("gym_week", week);
+  }, [week]);
+  useEffect(() => {
+    saveLS("gym_activeDay", activeDay);
+  }, [activeDay]);
 
   const days = Object.keys(program);
   const exercises = program[activeDay]?.exercises ?? [];
@@ -523,9 +580,7 @@ export default function GymTracker() {
       ...prev,
       [activeDay]: {
         ...prev[activeDay],
-        exercises: prev[activeDay].exercises.map((ex: any) =>
-          ex.id === exId ? { ...ex, [field]: value } : ex
-        ),
+        exercises: prev[activeDay].exercises.map((ex: any) => (ex.id === exId ? { ...ex, [field]: value } : ex)),
       },
     }));
   }
@@ -539,7 +594,7 @@ export default function GymTracker() {
         exercises: (data as any).exercises.map((ex: any, i: number) => ({
           ...ex,
           step: ex.step ?? 2.5,
-          id: ex.id ?? `${day.slice(0,2)}${i}`,
+          id: ex.id ?? `${day.slice(0, 2)}${i}`,
         })),
       };
     }
@@ -553,30 +608,54 @@ export default function GymTracker() {
     <>
       <style>{FONTS}</style>
 
-      <div className="main-container" style={{
-        minHeight: "100vh",
-        background: "#f5f2ee",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "40px 16px 60px",
-      }}>
-
+      <div
+        className="main-container"
+        style={{
+          minHeight: "100vh",
+          background: "#f5f2ee",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          padding: "40px 16px 60px",
+        }}
+      >
         {/* ── Header ── */}
         <div className="main-header" style={{ width: "100%", maxWidth: 680, marginBottom: 36 }}>
-          <p style={{ fontFamily: "'Lato', sans-serif", fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "#bbb", marginBottom: 6 }}>
+          <p
+            style={{
+              fontFamily: "'Lato', sans-serif",
+              fontSize: 11,
+              letterSpacing: 2,
+              textTransform: "uppercase",
+              color: "#bbb",
+              marginBottom: 6,
+            }}
+          >
             Allenamento settimanale
           </p>
-          <div className="action-buttons" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 14 }}>
-            <h1 style={{
-              fontFamily: "'Playfair Display', serif",
-              fontSize: "clamp(32px, 6vw, 48px)",
-              fontWeight: 900,
-              color: "#1a1a1a",
-              letterSpacing: -1,
-              lineHeight: 1.05,
-            }}>
-              Training<br />Schedule
+          <div
+            className="action-buttons"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-end",
+              flexWrap: "wrap",
+              gap: 14,
+            }}
+          >
+            <h1
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: "clamp(32px, 6vw, 48px)",
+                fontWeight: 900,
+                color: "#1a1a1a",
+                letterSpacing: -1,
+                lineHeight: 1.05,
+              }}
+            >
+              Training
+              <br />
+              Schedule
             </h1>
 
             {/* Actions */}
@@ -585,10 +664,15 @@ export default function GymTracker() {
                 onClick={() => setShowImport(true)}
                 className="btn-ghost"
                 style={{
-                  padding: "8px 16px", borderRadius: 8,
-                  border: "1.5px solid #d0ccc5", background: "transparent",
-                  fontFamily: "'Lato', sans-serif", fontSize: 12,
-                  cursor: "pointer", color: "#666", transition: "background 0.15s",
+                  padding: "8px 16px",
+                  borderRadius: 8,
+                  border: "1.5px solid #d0ccc5",
+                  background: "transparent",
+                  fontFamily: "'Lato', sans-serif",
+                  fontSize: 12,
+                  cursor: "pointer",
+                  color: "#666",
+                  transition: "background 0.15s",
                 }}
               >
                 ↑ Importa scheda
@@ -596,11 +680,14 @@ export default function GymTracker() {
               <button
                 onClick={() => setEditMode(e => !e)}
                 style={{
-                  padding: "8px 16px", borderRadius: 8,
+                  padding: "8px 16px",
+                  borderRadius: 8,
                   border: "none",
                   background: editMode ? "#1a1a1a" : "#e8e3db",
-                  fontFamily: "'Lato', sans-serif", fontSize: 12,
-                  fontWeight: 700, cursor: "pointer",
+                  fontFamily: "'Lato', sans-serif",
+                  fontSize: 12,
+                  fontWeight: 700,
+                  cursor: "pointer",
                   color: editMode ? "#f5f2ee" : "#555",
                   transition: "all 0.15s",
                 }}
@@ -613,20 +700,34 @@ export default function GymTracker() {
 
         {/* ── Week selector ── */}
         <div style={{ width: "100%", maxWidth: 680, marginBottom: 28 }}>
-          <p style={{ fontFamily: "'Lato', sans-serif", fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", color: "#bbb", marginBottom: 10 }}>
+          <p
+            style={{
+              fontFamily: "'Lato', sans-serif",
+              fontSize: 10,
+              letterSpacing: 1.5,
+              textTransform: "uppercase",
+              color: "#bbb",
+              marginBottom: 10,
+            }}
+          >
             Settimana
           </p>
           <WeekSelector week={week} setWeek={setWeek} />
         </div>
 
         {/* ── Day tabs ── */}
-        <div className="day-tabs" style={{
-          width: "100%", maxWidth: 680,
-          display: "flex", gap: 0,
-          borderBottom: "2px solid #1a1a1a",
-          marginBottom: 0,
-          overflowX: "auto",
-        }}>
+        <div
+          className="day-tabs"
+          style={{
+            width: "100%",
+            maxWidth: 680,
+            display: "flex",
+            gap: 0,
+            borderBottom: "2px solid #1a1a1a",
+            marginBottom: 0,
+            overflowX: "auto",
+          }}
+        >
           {days.map(d => (
             <button
               key={d}
@@ -653,20 +754,29 @@ export default function GymTracker() {
         </div>
 
         {/* ── Day card ── */}
-        <div className="day-card fade-in" style={{
-          width: "100%", maxWidth: 680,
-          background: "#fff",
-          borderRadius: "0 0 14px 14px",
-          boxShadow: "0 4px 24px rgba(0,0,0,0.07)",
-          overflow: "hidden",
-          marginBottom: 32,
-        }}>
+        <div
+          className="day-card fade-in"
+          style={{
+            width: "100%",
+            maxWidth: 680,
+            background: "#fff",
+            borderRadius: "0 0 14px 14px",
+            boxShadow: "0 4px 24px rgba(0,0,0,0.07)",
+            overflow: "hidden",
+            marginBottom: 32,
+          }}
+        >
           {/* Day label */}
-          <div className="day-label" style={{
-            padding: "16px 20px 14px",
-            borderBottom: "1px solid #f0ece6",
-            display: "flex", justifyContent: "space-between", alignItems: "center",
-          }}>
+          <div
+            className="day-label"
+            style={{
+              padding: "16px 20px 14px",
+              borderBottom: "1px solid #f0ece6",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
             <span style={{ fontFamily: "'Lato', sans-serif", fontSize: 12, color: "#aaa", letterSpacing: 0.5 }}>
               {program[activeDay]?.label || ""}
             </span>
@@ -677,55 +787,85 @@ export default function GymTracker() {
 
           {/* Table */}
           <div style={{ padding: "8px 8px 12px" }}>
-            <ExerciseTable
-              day={activeDay}
-              exercises={exercises}
-              week={week}
-              onUpdate={handleUpdate}
-              editMode={editMode}
-            />
+            <ExerciseTable exercises={exercises} week={week} onUpdate={handleUpdate} editMode={editMode} />
           </div>
         </div>
 
         {/* ── Progression overview ── */}
         <div style={{ width: "100%", maxWidth: 680 }}>
-          <p style={{ fontFamily: "'Lato', sans-serif", fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", color: "#bbb", marginBottom: 14 }}>
+          <p
+            style={{
+              fontFamily: "'Lato', sans-serif",
+              fontSize: 10,
+              letterSpacing: 1.5,
+              textTransform: "uppercase",
+              color: "#bbb",
+              marginBottom: 14,
+            }}
+          >
             Panoramica progressione — {activeDay}
           </p>
-          <div className="progression-wrapper" style={{
-            background: "#fff",
-            borderRadius: 12,
-            overflow: "hidden",
-            boxShadow: "0 2px 12px rgba(0,0,0,0.05)",
-          }}>
+          <div
+            className="progression-wrapper"
+            style={{
+              background: "#fff",
+              borderRadius: 12,
+              overflow: "hidden",
+              boxShadow: "0 2px 12px rgba(0,0,0,0.05)",
+            }}
+          >
             <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
               <table className="progression-table" style={{ width: "100%", borderCollapse: "collapse", minWidth: 500 }}>
                 <thead>
                   <tr style={{ borderBottom: "2px solid #f0ece6" }}>
                     <th style={thS}>Esercizio</th>
                     {WEEKS.map(w => (
-                      <th key={w} style={{ ...thS, color: w === week ? "#1a1a1a" : "#ccc", fontWeight: w === week ? 700 : 400 }}>
+                      <th
+                        key={w}
+                        style={{
+                          ...thS,
+                          color: w === week ? "#1a1a1a" : "#ccc",
+                          fontWeight: w === week ? 700 : 400,
+                        }}
+                      >
                         W{w}
                       </th>
                     ))}
-                  </td>
+                  </tr>
                 </thead>
                 <tbody>
                   {exercises.map((ex: any, i: number) => (
-                    <tr key={ex.id} style={{ background: i % 2 === 0 ? "#fff" : "#fdfcfa", borderBottom: "1px solid #f5f2ee" }}>
-                      <td style={{ ...tdS, textAlign: "left", color: "#444", fontWeight: 400, minWidth: 130 }}>
+                    <tr
+                      key={ex.id}
+                      style={{
+                        background: i % 2 === 0 ? "#fff" : "#fdfcfa",
+                        borderBottom: "1px solid #f5f2ee",
+                      }}
+                    >
+                      <td
+                        style={{
+                          ...tdS,
+                          textAlign: "left",
+                          color: "#444",
+                          fontWeight: 400,
+                          minWidth: 130,
+                        }}
+                      >
                         {ex.name}
                       </td>
                       {WEEKS.map(w => {
                         const kg = calcKg(ex.baseKg, ex.id, w, ex.step);
                         const active = w === week;
                         return (
-                          <td key={w} style={{
-                            ...tdS,
-                            color: ex.baseKg === 0 ? "#ddd" : active ? "#1a1a1a" : "#bbb",
-                            fontWeight: active ? 700 : 400,
-                            background: active ? "#fffcf4" : "transparent",
-                          }}>
+                          <td
+                            key={w}
+                            style={{
+                              ...tdS,
+                              color: ex.baseKg === 0 ? "#ddd" : active ? "#1a1a1a" : "#bbb",
+                              fontWeight: active ? 700 : 400,
+                              background: active ? "#fffcf4" : "transparent",
+                            }}
+                          >
                             {ex.baseKg === 0 ? "BW" : kg}
                           </td>
                         );
@@ -739,8 +879,19 @@ export default function GymTracker() {
         </div>
 
         {/* ── Footer ── */}
-        <p className="footer-text" style={{ marginTop: 40, fontFamily: "'Lato', sans-serif", fontSize: 11, color: "#ccc", textAlign: "center", lineHeight: 1.8 }}>
-          Progressione lineare · Compound +2.5 kg/sett · Isolamento +1.25 kg/sett<br />
+        <p
+          className="footer-text"
+          style={{
+            marginTop: 40,
+            fontFamily: "'Lato', sans-serif",
+            fontSize: 11,
+            color: "#ccc",
+            textAlign: "center",
+            lineHeight: 1.8,
+          }}
+        >
+          Progressione lineare · Compound +2.5 kg/sett · Isolamento +1.25 kg/sett
+          <br />
           Importa la tua scheda per personalizzare tutto
         </p>
       </div>
@@ -752,16 +903,19 @@ export default function GymTracker() {
 
 const thS = {
   fontFamily: "'Lato', sans-serif",
-  fontSize: 10, letterSpacing: 1,
+  fontSize: 10,
+  letterSpacing: 1,
   textTransform: "uppercase",
-  color: "#ccc", fontWeight: 400,
+  color: "#ccc",
+  fontWeight: 400,
   padding: "10px 12px",
   textAlign: "center",
 };
 
 const tdS = {
   fontFamily: "'Lato', sans-serif",
-  fontSize: 12, color: "#bbb",
+  fontSize: 12,
+  color: "#bbb",
   padding: "9px 12px",
   textAlign: "center",
   transition: "background 0.12s",
