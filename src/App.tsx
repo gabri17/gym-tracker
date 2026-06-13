@@ -36,10 +36,131 @@ const FONTS = `
     to   { opacity: 1; transform: translateY(0); }
   }
   .fade-in { animation: fadeIn 0.22s ease both; }
+
+  /* ----- MOBILE OPTIMIZATIONS ----- */
+  @media (max-width: 640px) {
+    /* Larger touch targets */
+    .week-selector button {
+      width: 44px !important;
+      height: 44px !important;
+      font-size: 14px !important;
+    }
+    
+    .day-tabs button {
+      padding: 12px 16px !important;
+      font-size: 14px !important;
+      min-width: 70px;
+    }
+    
+    .action-buttons button {
+      padding: 10px 18px !important;
+      font-size: 13px !important;
+    }
+    
+    /* Improve spacing and readability */
+    .main-container {
+      padding: 24px 12px 48px !important;
+    }
+    
+    .day-card {
+      border-radius: 16px !important;
+    }
+    
+    .day-label {
+      padding: 14px 16px !important;
+      font-size: 11px !important;
+    }
+    
+    /* Make tables scrollable horizontally */
+    .exercise-table-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 0 -4px;
+      padding: 0 4px;
+    }
+    
+    .exercise-table-wrapper .exercise-grid-header,
+    .exercise-table-wrapper .exercise-grid-row {
+      min-width: 520px;
+    }
+    
+    /* Better edit inputs on mobile */
+    .edit-input {
+      width: 70px !important;
+      padding: 8px 4px !important;
+      font-size: 14px !important;
+    }
+    
+    /* Modal adjustments */
+    .import-modal {
+      padding: 20px !important;
+      max-width: 94% !important;
+      max-height: 85vh !important;
+      overflow-y: auto !important;
+    }
+    
+    .import-modal textarea {
+      font-size: 14px !important;
+    }
+    
+    /* Progression table improvements */
+    .progression-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .progression-table th,
+    .progression-table td {
+      padding: 10px 8px !important;
+      font-size: 11px !important;
+      min-width: 48px;
+    }
+    
+    .progression-table th:first-child,
+    .progression-table td:first-child {
+      position: sticky;
+      left: 0;
+      background: inherit;
+      z-index: 2;
+      min-width: 110px;
+    }
+    
+    /* Header adjustments */
+    .main-header h1 {
+      font-size: clamp(28px, 7vw, 40px) !important;
+    }
+    
+    .week-selector {
+      gap: 8px !important;
+    }
+    
+    /* Improve footer readability */
+    .footer-text {
+      font-size: 10px !important;
+      padding: 0 16px !important;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .day-tabs {
+      gap: 4px !important;
+    }
+    
+    .day-tabs button {
+      padding: 10px 12px !important;
+      font-size: 13px !important;
+      min-width: 60px;
+    }
+    
+    .action-buttons {
+      width: 100%;
+      justify-content: flex-end;
+    }
+  }
 `;
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
-function calcKg(baseKg, exId, week, stepOverride) {
+function calcKg(baseKg: number, exId: string, week: number, stepOverride: number) {
   if (baseKg === 0) return 0;
   const step = stepOverride ?? 2.5;
   return Math.round((baseKg + step * (week - 1)) * 4) / 4;
@@ -49,10 +170,10 @@ function calcKg(baseKg, exId, week, stepOverride) {
 // Expected format (flexible):
 // [Day Name] — [Label]
 // ExerciseName | sets x reps | baseKg
-function parseTextImport(raw) {
+function parseTextImport(raw: string) {
   const lines = raw.split("\n").map(l => l.trim()).filter(Boolean);
-  const program = {};
-  let currentDay = null;
+  const program: Record<string, any> = {};
+  let currentDay: string | null = null;
   let exCounter = 0;
 
   const DAY_RE = /^(lun|mar|mer|gio|ven|sab|dom|monday|tuesday|wednesday|thursday|friday|saturday|sunday|\w+)\b/i;
@@ -138,9 +259,9 @@ const WEEKS = [1,2,3,4,5,6,7,8];
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-function WeekSelector({ week, setWeek }) {
+function WeekSelector({ week, setWeek }: { week: number; setWeek: (w: number) => void }) {
   return (
-    <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
+    <div className="week-selector" style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
       {WEEKS.map(w => (
         <button
           key={w}
@@ -163,11 +284,17 @@ function WeekSelector({ week, setWeek }) {
   );
 }
 
-function ExerciseTable({ day, exercises, week, onUpdate, editMode }) {
+function ExerciseTable({ day, exercises, week, onUpdate, editMode }: { 
+  day: string; 
+  exercises: any[]; 
+  week: number; 
+  onUpdate: (id: string, field: string, value: number) => void; 
+  editMode: boolean;
+}) {
   return (
-    <div className="fade-in" style={{ width: "100%" }}>
+    <div className="exercise-table-wrapper" style={{ width: "100%" }}>
       {/* Table header */}
-      <div style={{
+      <div className="exercise-grid-header" style={{
         display: "grid",
         gridTemplateColumns: "1fr 72px 90px 80px 70px",
         padding: "6px 12px",
@@ -194,7 +321,7 @@ function ExerciseTable({ day, exercises, week, onUpdate, editMode }) {
         return (
           <div
             key={ex.id}
-            className="row-hover"
+            className="exercise-grid-row row-hover"
             style={{
               display: "grid",
               gridTemplateColumns: "1fr 72px 90px 80px 70px",
@@ -223,6 +350,7 @@ function ExerciseTable({ day, exercises, week, onUpdate, editMode }) {
                   step="1.25"
                   value={ex.baseKg}
                   onChange={e => onUpdate(ex.id, "baseKg", parseFloat(e.target.value) || 0)}
+                  className="edit-input"
                   style={{
                     width: 60, textAlign: "center",
                     border: "1.5px solid #c8b89a",
@@ -267,7 +395,7 @@ function ExerciseTable({ day, exercises, week, onUpdate, editMode }) {
   );
 }
 
-function ImportPanel({ onImport, onClose }) {
+function ImportPanel({ onImport, onClose }: { onImport: (prog: any) => void; onClose: () => void }) {
   const [raw, setRaw] = useState("");
   const [error, setError] = useState("");
 
@@ -296,7 +424,7 @@ Lat Machine | 4x8-10 | 65`;
       display: "flex", alignItems: "center", justifyContent: "center",
       zIndex: 100, padding: 20,
     }}>
-      <div className="fade-in" style={{
+      <div className="import-modal fade-in" style={{
         background: "#fff",
         borderRadius: 16,
         padding: 32,
@@ -362,7 +490,7 @@ Lat Machine | 4x8-10 | 65`;
 
 // ─── Main App ─────────────────────────────────────────────────────────────────
 export default function GymTracker() {
-  // ── Initialise from localStorage (lazy initialisers run only once on mount) ─
+  // ── Initialise from localStorage ─────────────────────────────────────────
   const [program, setProgram] = useState(() =>
     loadLS("gym_program", PLACEHOLDER_PROGRAM)
   );
@@ -374,7 +502,6 @@ export default function GymTracker() {
   const [activeDay, setActiveDay] = useState(() => {
     const savedProgram = loadLS("gym_program", PLACEHOLDER_PROGRAM);
     const savedDay    = loadLS("gym_activeDay", Object.keys(savedProgram)[0]);
-    // Guard: saved day might not exist if program was reset
     return Object.keys(savedProgram).includes(savedDay)
       ? savedDay
       : Object.keys(savedProgram)[0];
@@ -391,25 +518,25 @@ export default function GymTracker() {
   const days = Object.keys(program);
   const exercises = program[activeDay]?.exercises ?? [];
 
-  function handleUpdate(exId, field, value) {
-    setProgram(prev => ({
+  function handleUpdate(exId: string, field: string, value: number) {
+    setProgram((prev: any) => ({
       ...prev,
       [activeDay]: {
         ...prev[activeDay],
-        exercises: prev[activeDay].exercises.map(ex =>
+        exercises: prev[activeDay].exercises.map((ex: any) =>
           ex.id === exId ? { ...ex, [field]: value } : ex
         ),
       },
     }));
   }
 
-  function handleImport(newProgram) {
+  function handleImport(newProgram: any) {
     // Assign step defaults
-    const enriched = {};
+    const enriched: any = {};
     for (const [day, data] of Object.entries(newProgram)) {
       enriched[day] = {
-        ...data,
-        exercises: data.exercises.map((ex, i) => ({
+        ...(data as any),
+        exercises: (data as any).exercises.map((ex: any, i: number) => ({
           ...ex,
           step: ex.step ?? 2.5,
           id: ex.id ?? `${day.slice(0,2)}${i}`,
@@ -426,7 +553,7 @@ export default function GymTracker() {
     <>
       <style>{FONTS}</style>
 
-      <div style={{
+      <div className="main-container" style={{
         minHeight: "100vh",
         background: "#f5f2ee",
         display: "flex",
@@ -436,11 +563,11 @@ export default function GymTracker() {
       }}>
 
         {/* ── Header ── */}
-        <div style={{ width: "100%", maxWidth: 680, marginBottom: 36 }}>
+        <div className="main-header" style={{ width: "100%", maxWidth: 680, marginBottom: 36 }}>
           <p style={{ fontFamily: "'Lato', sans-serif", fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "#bbb", marginBottom: 6 }}>
             Allenamento settimanale
           </p>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 14 }}>
+          <div className="action-buttons" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 14 }}>
             <h1 style={{
               fontFamily: "'Playfair Display', serif",
               fontSize: "clamp(32px, 6vw, 48px)",
@@ -493,7 +620,7 @@ export default function GymTracker() {
         </div>
 
         {/* ── Day tabs ── */}
-        <div style={{
+        <div className="day-tabs" style={{
           width: "100%", maxWidth: 680,
           display: "flex", gap: 0,
           borderBottom: "2px solid #1a1a1a",
@@ -526,7 +653,7 @@ export default function GymTracker() {
         </div>
 
         {/* ── Day card ── */}
-        <div className="fade-in" style={{
+        <div className="day-card fade-in" style={{
           width: "100%", maxWidth: 680,
           background: "#fff",
           borderRadius: "0 0 14px 14px",
@@ -535,7 +662,7 @@ export default function GymTracker() {
           marginBottom: 32,
         }}>
           {/* Day label */}
-          <div style={{
+          <div className="day-label" style={{
             padding: "16px 20px 14px",
             borderBottom: "1px solid #f0ece6",
             display: "flex", justifyContent: "space-between", alignItems: "center",
@@ -565,14 +692,14 @@ export default function GymTracker() {
           <p style={{ fontFamily: "'Lato', sans-serif", fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", color: "#bbb", marginBottom: 14 }}>
             Panoramica progressione — {activeDay}
           </p>
-          <div style={{
+          <div className="progression-wrapper" style={{
             background: "#fff",
             borderRadius: 12,
             overflow: "hidden",
             boxShadow: "0 2px 12px rgba(0,0,0,0.05)",
           }}>
-            <div style={{ overflowX: "auto" }}>
-              <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 500 }}>
+            <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
+              <table className="progression-table" style={{ width: "100%", borderCollapse: "collapse", minWidth: 500 }}>
                 <thead>
                   <tr style={{ borderBottom: "2px solid #f0ece6" }}>
                     <th style={thS}>Esercizio</th>
@@ -581,10 +708,10 @@ export default function GymTracker() {
                         W{w}
                       </th>
                     ))}
-                  </tr>
+                  </td>
                 </thead>
                 <tbody>
-                  {exercises.map((ex, i) => (
+                  {exercises.map((ex: any, i: number) => (
                     <tr key={ex.id} style={{ background: i % 2 === 0 ? "#fff" : "#fdfcfa", borderBottom: "1px solid #f5f2ee" }}>
                       <td style={{ ...tdS, textAlign: "left", color: "#444", fontWeight: 400, minWidth: 130 }}>
                         {ex.name}
@@ -612,7 +739,7 @@ export default function GymTracker() {
         </div>
 
         {/* ── Footer ── */}
-        <p style={{ marginTop: 40, fontFamily: "'Lato', sans-serif", fontSize: 11, color: "#ccc", textAlign: "center", lineHeight: 1.8 }}>
+        <p className="footer-text" style={{ marginTop: 40, fontFamily: "'Lato', sans-serif", fontSize: 11, color: "#ccc", textAlign: "center", lineHeight: 1.8 }}>
           Progressione lineare · Compound +2.5 kg/sett · Isolamento +1.25 kg/sett<br />
           Importa la tua scheda per personalizzare tutto
         </p>
