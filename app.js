@@ -241,7 +241,7 @@ function renderBuilder() {
                                 <input type="text" class="ex-name-input" placeholder="Nome esercizio"
                                     value="${escapeHtml(ex.nome)}"
                                     onchange="updateExerciseField(${dIdx}, ${eIdx}, 'nome', this.value)">
-                                <input type="text" class="ex-serierip-input" placeholder="SxR (es. 4x10)"
+                                <input type="text" class="ex-serierip-input" placeholder="SxR"
                                     value="${escapeHtml(ex.serieRip)}"
                                     onchange="updateExerciseField(${dIdx}, ${eIdx}, 'serieRip', this.value)">
                             </div>

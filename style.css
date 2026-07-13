@@ -178,35 +178,26 @@ body {
 /* --- DAY TABS (Workout) --- */
 .day-tabs {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
-    overflow-x: auto;
-    padding-bottom: 8px;
     margin-bottom: 16px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-}
-
-.day-tabs::-webkit-scrollbar {
-    height: 4px;
-}
-
-.day-tabs::-webkit-scrollbar-thumb {
-    background: #D1D5DB;
-    border-radius: 4px;
 }
 
 .day-pill {
-    flex-shrink: 0;
+    flex: 1 1 calc(50% - 4px);
+    min-width: 0;
     background-color: var(--card-bg);
     border: 2px solid #E5E7EB;
     border-radius: 12px;
-    padding: 10px 18px;
-    font-size: 0.9rem;
+    padding: 10px 12px;
+    font-size: 0.85rem;
     font-weight: 600;
     color: var(--text-muted);
     cursor: pointer;
     transition: all 0.2s;
-    white-space: nowrap;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .day-pill:hover {
