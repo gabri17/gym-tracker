@@ -106,10 +106,11 @@ body {
 
 .week-current {
     color: var(--primary);
+    text-decoration: underline; 
 }
 
 .week-future {
-    color: #0EA5E9;
+    color: var(--primary);
 }
 
 .week-nav-btn {
