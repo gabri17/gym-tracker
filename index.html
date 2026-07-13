@@ -35,7 +35,8 @@
                 <h2>Configurazione</h2>
 
                 <label for="start-week">Settimana di Inizio:</label>
-                <input type="week" id="start-week">
+                <input type="week" id="start-week" onchange="previewStartWeek()">
+                <span id="start-week-preview" class="week-preview"></span>
             </div>
 
             <div class="setup-card">

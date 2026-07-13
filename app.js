@@ -51,6 +51,23 @@ function formatWeekDisplay(weekStr) {
     return `W${w}-${year}: ${fmt(monday)} - ${fmt(sunday)}`;
 }
 
+function previewStartWeek() {
+    const val = document.getElementById('start-week').value;
+    const el = document.getElementById('start-week-preview');
+    if (!val) { el.textContent = ''; return; }
+    const [year, w] = val.split('-W').map(Number);
+    const jan4 = new Date(year, 0, 4);
+    const dayOfWeek = jan4.getDay() || 7;
+    const mondayWeek1 = new Date(jan4);
+    mondayWeek1.setDate(jan4.getDate() - dayOfWeek + 1);
+    const monday = new Date(mondayWeek1);
+    monday.setDate(mondayWeek1.getDate() + (w - 1) * 7);
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+    const fmt = (d) => `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}`;
+    el.textContent = `Settimana dal ${fmt(monday)} al ${fmt(sunday)}`;
+}
+
 function getWeekDiff(week1, week2) {
     if (!week1 || !week2) return 0;
     const [y1, w1] = week1.split('-W').map(Number);
@@ -288,6 +305,7 @@ function escapeHtml(str) {
 // --- SETUP: POPOLA E SALVA ---
 function populateSetupForm() {
     document.getElementById('start-week').value = appData.startWeek || getCurrentWeekString();
+    previewStartWeek();
 
     // Copia routine nel builder
     if (appData.routine.length > 0) {
