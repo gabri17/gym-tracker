@@ -301,10 +301,24 @@ body {
 
 .action-area {
     display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.action-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.action-row {
+    display: flex;
     gap: 10px;
 }
 
-.action-area input {
+.action-row input {
     margin-bottom: 0;
     flex: 2;
     text-align: center;
@@ -313,16 +327,15 @@ body {
     padding: 12px;
     border: 2px solid #E5E7EB;
     border-radius: var(--border-radius-sm);
-    background: #F9FAFB;
     transition: border-color 0.2s;
 }
 
-.action-area input:focus {
+.action-row input:focus {
     outline: none;
     border-color: var(--primary);
 }
 
-.btn-confirm {
+.action-row .btn-confirm {
     flex: 1;
     background-color: var(--success);
     color: white;
@@ -334,7 +347,7 @@ body {
     font-size: 0.95rem;
 }
 
-.btn-confirm:active {
+.action-row .btn-confirm:active {
     transform: scale(0.96);
 }
 
@@ -617,4 +630,10 @@ input, select, textarea {
 
 .msg-success.visible {
     opacity: 1;
+}
+
+.setup-hint {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin: 0;
 }

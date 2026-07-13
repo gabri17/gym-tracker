@@ -36,12 +36,6 @@
 
                 <label for="start-week">Settimana di Inizio:</label>
                 <input type="week" id="start-week">
-
-                <div class="setup-actions-row">
-                    <button class="btn-secondary" onclick="importJsonFile()">Importa JSON</button>
-                    <button class="btn-secondary" onclick="exportJsonFile()">Esporta JSON</button>
-                    <input type="file" id="file-import" accept=".json" onchange="handleFileImport(event)" style="display:none">
-                </div>
             </div>
 
             <div class="setup-card">
@@ -56,6 +50,30 @@
                     <button class="btn-primary" onclick="saveSetup()">Salva Configurazione</button>
                     <p id="setup-msg" class="msg-success"></p>
                 </div>
+            </div>
+
+            <div class="setup-card">
+                <div class="setup-card-header">
+                    <h2>Scheda</h2>
+                    <div class="setup-actions-row" style="margin-bottom:0">
+                        <button class="btn-secondary" onclick="importJsonFile()">Importa</button>
+                        <button class="btn-secondary" onclick="exportJsonFile()">Esporta</button>
+                        <input type="file" id="file-import" accept=".json" onchange="handleFileImport(event)" style="display:none">
+                    </div>
+                </div>
+                <p class="setup-hint">Esporta o importa la scheda di allenamento in formato JSON.</p>
+            </div>
+
+            <div class="setup-card">
+                <div class="setup-card-header">
+                    <h2>Progressi</h2>
+                    <div class="setup-actions-row" style="margin-bottom:0">
+                        <button class="btn-secondary" onclick="importProgressFile()">Importa</button>
+                        <button class="btn-secondary" onclick="exportProgressFile()">Esporta</button>
+                        <input type="file" id="file-import-progress" accept=".json" onchange="handleProgressImport(event)" style="display:none">
+                    </div>
+                </div>
+                <p class="setup-hint">Esporta o importa i dati dei pesi registrati per backup o trasferimento.</p>
             </div>
         </section>
     </main>

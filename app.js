@@ -123,7 +123,7 @@ function calculateTargetWeight(exId, baseKg, deltaKg) {
     let target = baseKg;
     const [startY, startW] = appData.startWeek.split('-W').map(Number);
 
-    for (let i = 0; i <= diff; i++) {
+    for (let i = 0; i < diff; i++) {
         let iterWeekNum = startW + i;
         let iterYear = startY;
         if (iterWeekNum > 52) { iterWeekNum -= 52; iterYear += 1; }
@@ -132,9 +132,7 @@ function calculateTargetWeight(exId, baseKg, deltaKg) {
         if (appData.progress[iterWeekStr] && appData.progress[iterWeekStr][exId]) {
             target = appData.progress[iterWeekStr][exId];
         }
-        if (i < diff) {
-            target += deltaKg;
-        }
+        target += deltaKg;
     }
     return target;
 }
@@ -414,6 +412,63 @@ function exportJsonFile() {
     URL.revokeObjectURL(url);
 }
 
+// --- IMPORT / EXPORT PROGRESS ---
+function exportProgressFile() {
+    const progress = appData.progress || {};
+    if (Object.keys(progress).length === 0) {
+        alert('Nessun progresso da esportare.');
+        return;
+    }
+    const json = JSON.stringify(progress, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `gym-progress-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function importProgressFile() {
+    document.getElementById('file-import-progress').click();
+}
+
+function handleProgressImport(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        try {
+            const data = JSON.parse(e.target.result);
+            if (typeof data !== 'object' || Array.isArray(data)) {
+                alert('Il file non contiene un oggetto progressi valido.');
+                return;
+            }
+            // Validazione: ogni chiave deve essere una stringa settimana, ogni valore un oggetto
+            for (const [week, exMap] of Object.entries(data)) {
+                if (typeof exMap !== 'object' || Array.isArray(exMap)) {
+                    alert(`Formato non valido per la settimana "${week}".`);
+                    return;
+                }
+            }
+            appData.progress = data;
+            saveToLocalStorage();
+            updateWorkoutView();
+            const msg = document.getElementById('setup-msg');
+            msg.innerText = `Importate ${Object.keys(data).length} settimane di progressi.`;
+            msg.classList.add('visible');
+            setTimeout(() => { msg.innerText = ''; msg.classList.remove('visible'); }, 3000);
+        } catch (err) {
+            alert('Errore nel parsing del file JSON: ' + err.message);
+        }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
+}
+
 // --- WORKOUT: VISUALIZZAZIONE ---
 function updateWorkoutView() {
     updateWeekDisplay();
@@ -519,8 +574,11 @@ function renderWorkoutDay(dayIndex) {
                 </div>
             </div>
             <div class="action-area">
-                <input type="number" step="0.5" min="0" id="input-${ex.id}" value="${currentActual}">
-                <button class="btn-confirm" onclick="saveExerciseProgress('${ex.id}')">Conferma</button>
+                <label class="action-label">Effettivo</label>
+                <div class="action-row">
+                    <input type="number" step="0.5" min="0" id="input-${ex.id}" value="${currentActual}">
+                    <button class="btn-confirm" onclick="saveExerciseProgress('${ex.id}')">Conferma</button>
+                </div>
             </div>
         `;
         container.appendChild(card);
