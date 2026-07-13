@@ -1,0 +1,629 @@
+:root {
+    --primary: #4F46E5;
+    --primary-hover: #4338CA;
+    --primary-light: #EEF2FF;
+    --bg-color: #F3F4F6;
+    --card-bg: #FFFFFF;
+    --text-main: #1F2937;
+    --text-muted: #6B7280;
+    --success: #10B981;
+    --danger: #EF4444;
+    --border-radius: 16px;
+    --border-radius-sm: 8px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    overflow-x: hidden;
+}
+
+/* --- HEADER & NAV --- */
+.app-header {
+    background-color: var(--card-bg);
+    padding: 16px 16px 0 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.app-header h1 {
+    font-size: 1.5rem;
+    color: var(--primary);
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.tabs {
+    display: flex;
+    justify-content: space-between;
+}
+
+.tabs button {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.tabs button.active {
+    color: var(--primary);
+    border-bottom: 3px solid var(--primary);
+}
+
+/* --- VIEWS --- */
+.view {
+    display: none;
+    padding: 16px;
+    padding-bottom: 40px;
+}
+
+.view.active {
+    display: block;
+}
+
+/* --- STATUS BAR --- */
+.status-bar {
+    margin-bottom: 16px;
+}
+
+#current-week-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.week-nav-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.week-label {
+    font-size: 0.95rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.week-past {
+    color: #9CA3AF;
+}
+
+.week-current {
+    color: var(--primary);
+}
+
+.week-future {
+    color: #0EA5E9;
+}
+
+.week-nav-btn {
+    background: var(--card-bg);
+    border: 2px solid #E5E7EB;
+    border-radius: 8px;
+    width: 32px;
+    height: 32px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    line-height: 1;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.week-nav-btn:hover {
+    background-color: var(--primary-light);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.week-nav-btn:active {
+    transform: scale(0.92);
+}
+
+.week-nav-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    border-color: #E5E7EB;
+    background: var(--card-bg);
+}
+
+.week-nav-btn:disabled:hover {
+    border-color: #E5E7EB;
+    background: var(--card-bg);
+    color: var(--text-muted);
+}
+
+.week-today-row {
+    display: flex;
+    justify-content: center;
+}
+
+.week-today-btn {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.week-today-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+/* --- DAY TABS (Workout) --- */
+.day-tabs {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+.day-tabs::-webkit-scrollbar {
+    height: 4px;
+}
+
+.day-tabs::-webkit-scrollbar-thumb {
+    background: #D1D5DB;
+    border-radius: 4px;
+}
+
+.day-pill {
+    flex-shrink: 0;
+    background-color: var(--card-bg);
+    border: 2px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 10px 18px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.day-pill:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.day-pill.active {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+}
+
+.placeholder-text {
+    text-align: center;
+    color: var(--text-muted);
+    margin-top: 32px;
+}
+
+/* --- EXERCISE CARDS (Workout) --- */
+.exercise-card {
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border-left: 4px solid var(--primary);
+    transition: border-color 0.2s;
+}
+
+.exercise-card.logged {
+    border-left-color: var(--success);
+    background-color: #F0FDF4;
+}
+
+.ex-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.ex-title-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.ex-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.ex-reps {
+    background-color: var(--primary-light);
+    color: var(--primary);
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.ex-badge-logged {
+    background-color: var(--success);
+    color: white;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+.ex-details {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 14px;
+    padding: 10px 0;
+    border-top: 1px solid #F3F4F6;
+    border-bottom: 1px solid #F3F4F6;
+}
+
+.ex-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.ex-detail-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ex-detail-value {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.action-area {
+    display: flex;
+    gap: 10px;
+}
+
+.action-area input {
+    margin-bottom: 0;
+    flex: 2;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding: 12px;
+    border: 2px solid #E5E7EB;
+    border-radius: var(--border-radius-sm);
+    background: #F9FAFB;
+    transition: border-color 0.2s;
+}
+
+.action-area input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.btn-confirm {
+    flex: 1;
+    background-color: var(--success);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.1s;
+    font-size: 0.95rem;
+}
+
+.btn-confirm:active {
+    transform: scale(0.96);
+}
+
+/* --- SETUP --- */
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-main);
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #D1D5DB;
+    border-radius: var(--border-radius-sm);
+    margin-bottom: 16px;
+    font-size: 16px;
+    background-color: #F9FAFB;
+}
+
+.btn-primary {
+    width: 100%;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: var(--border-radius-sm);
+    font-size: 1rem;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+.setup-card {
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.setup-card h2 {
+    font-size: 1.1rem;
+    color: var(--text-main);
+    margin-bottom: 16px;
+}
+
+.setup-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.setup-card-header h2 {
+    margin-bottom: 0;
+}
+
+.setup-actions-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.btn-secondary {
+    flex: 1;
+    background-color: var(--card-bg);
+    color: var(--primary);
+    border: 2px solid var(--primary);
+    padding: 10px 12px;
+    border-radius: var(--border-radius-sm);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: var(--primary-light);
+}
+
+.btn-secondary:active {
+    transform: scale(0.97);
+}
+
+.btn-add-day {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: var(--border-radius-sm);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-add-day:hover {
+    background-color: var(--primary-hover);
+}
+
+/* --- BUILDER DAYS --- */
+.builder-days {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.builder-empty {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 24px 0;
+    font-size: 0.9rem;
+}
+
+.builder-day-card {
+    border: 1px solid #E5E7EB;
+    border-radius: var(--border-radius-sm);
+    overflow: hidden;
+}
+
+.builder-day-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #F9FAFB;
+    padding: 12px 14px;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.builder-day-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text-main);
+}
+
+.builder-day-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    padding: 4px 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.15s;
+    line-height: 1;
+}
+
+.btn-rename:hover {
+    background-color: #E5E7EB;
+}
+
+.btn-remove-day:hover,
+.btn-remove-ex:hover {
+    background-color: #FEE2E2;
+    color: var(--danger);
+}
+
+.btn-remove-ex {
+    align-self: center;
+    font-size: 1.3rem;
+    color: var(--text-muted);
+}
+
+.builder-day-exercises {
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.builder-ex-empty {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    padding: 8px 0;
+}
+
+.builder-exercise {
+    background-color: #F9FAFB;
+    border: 1px solid #E5E7EB;
+    border-radius: 6px;
+    padding: 10px;
+}
+
+.builder-ex-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.builder-ex-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+}
+
+.builder-ex-row input {
+    margin-bottom: 0;
+    padding: 8px 10px;
+    font-size: 0.9rem;
+    flex: 1;
+}
+
+.ex-name-input {
+    flex: 3 !important;
+}
+
+.ex-serierip-input {
+    flex: 1.2 !important;
+}
+
+.builder-ex-num {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.builder-ex-num label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-bottom: 3px;
+    font-weight: 500;
+}
+
+.builder-ex-num input {
+    padding: 8px 10px;
+    font-size: 0.9rem;
+}
+
+.btn-add-ex {
+    width: 100%;
+    background: none;
+    border: 2px dashed #D1D5DB;
+    padding: 10px;
+    border-radius: 6px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 4px;
+}
+
+.btn-add-ex:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background-color: var(--primary-light);
+}
+
+.setup-save-area {
+    margin-top: 20px;
+}
+
+.msg-success {
+    text-align: center;
+    color: var(--success);
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    min-height: 1.2em;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.msg-success.visible {
+    opacity: 1;
+}

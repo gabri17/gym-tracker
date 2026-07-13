@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gym Tracker V2</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="app-header">
+        <h1>GymTracker</h1>
+        <nav class="tabs">
+            <button id="tab-workout" class="active" onclick="switchTab('workout')">Allenamento</button>
+            <button id="tab-setup" onclick="switchTab('setup')">Scheda & Setup</button>
+        </nav>
+    </header>
+
+    <main id="app-content">
+        <!-- VISTA ALLENAMENTO -->
+        <section id="view-workout" class="view active">
+            <div class="status-bar">
+                <div id="current-week-display"></div>
+            </div>
+
+            <div id="day-tabs" class="day-tabs">
+                <p class="placeholder-text">Seleziona un giorno per iniziare l'allenamento.</p>
+            </div>
+
+            <div id="exercises-container"></div>
+        </section>
+
+        <!-- VISTA SCHEDA & SETUP -->
+        <section id="view-setup" class="view">
+            <div class="setup-card">
+                <h2>Configurazione</h2>
+
+                <label for="start-week">Settimana di Inizio:</label>
+                <input type="week" id="start-week">
+
+                <div class="setup-actions-row">
+                    <button class="btn-secondary" onclick="importJsonFile()">Importa JSON</button>
+                    <button class="btn-secondary" onclick="exportJsonFile()">Esporta JSON</button>
+                    <input type="file" id="file-import" accept=".json" onchange="handleFileImport(event)" style="display:none">
+                </div>
+            </div>
+
+            <div class="setup-card">
+                <div class="setup-card-header">
+                    <h2>Scheda</h2>
+                    <button class="btn-add-day" onclick="addDay()">+ Giorno</button>
+                </div>
+
+                <div id="builder-days" class="builder-days"></div>
+
+                <div class="setup-save-area">
+                    <button class="btn-primary" onclick="saveSetup()">Salva Configurazione</button>
+                    <p id="setup-msg" class="msg-success"></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
