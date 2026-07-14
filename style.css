@@ -219,6 +219,18 @@ body {
     margin-top: 32px;
 }
 
+.pre-start-message {
+    text-align: center;
+    color: var(--text-muted);
+    background-color: var(--card-bg);
+    border: 2px dashed #D1D5DB;
+    border-radius: var(--border-radius-sm);
+    padding: 24px 16px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
 /* --- EXERCISE CARDS (Workout) --- */
 .exercise-card {
     background-color: var(--card-bg);

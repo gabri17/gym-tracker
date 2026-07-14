@@ -502,6 +502,16 @@ function renderDayTabs() {
         return;
     }
 
+    const startWeek = appData.startWeek || getCurrentWeekString();
+    if (getWeekDiff(startWeek, selectedWeek) < 0) {
+        const msg = document.createElement('div');
+        msg.className = 'pre-start-message';
+        msg.innerHTML = `Il piano d'allenamento inizierà la settimana <strong>${formatWeekDisplay(startWeek)}</strong>`;
+        container.appendChild(msg);
+        document.getElementById('exercises-container').innerHTML = '';
+        return;
+    }
+
     appData.routine.forEach((giorno, index) => {
         const pill = document.createElement('button');
         pill.className = 'day-pill';
