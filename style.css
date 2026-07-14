@@ -498,14 +498,14 @@ input, select, textarea {
 
 .builder-day-actions {
     display: flex;
-    gap: 4px;
+    gap: 6px;
 }
 
 .btn-icon {
     background: none;
     border: none;
-    padding: 4px 8px;
-    font-size: 1.1rem;
+    padding: 6px 12px;
+    font-size: 1.6rem;
     cursor: pointer;
     border-radius: 4px;
     transition: background-color 0.15s;
@@ -524,7 +524,7 @@ input, select, textarea {
 
 .btn-remove-ex {
     align-self: center;
-    font-size: 1.3rem;
+    font-size: 1.8rem;
     color: var(--text-muted);
 }
 
@@ -646,4 +646,18 @@ input, select, textarea {
     margin-top: -10px;
     margin-bottom: 16px;
     font-weight: 500;
+}
+
+.alert-card {
+    border-left: 4px solid var(--danger);
+}
+
+.alert-card h2 {
+    color: var(--danger);
+}
+
+.alert-card p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.5;
 }
