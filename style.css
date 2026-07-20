@@ -673,3 +673,12 @@ input, select, textarea {
     color: var(--text-muted);
     line-height: 1.5;
 }
+
+@media (max-width: 480px) {
+    #start-week {
+        width: auto;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
